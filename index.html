@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vår Odlingslott</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Password Gate -->
+  <div id="password-screen">
+    <div class="password-box">
+      <h1>Vår Odlingslott</h1>
+      <p>Ange lösenord för att komma in</p>
+      <form id="password-form">
+        <input type="password" id="password-input" placeholder="Lösenord" autocomplete="off" required>
+        <button type="submit">Kom in</button>
+      </form>
+      <p id="password-error" class="error" hidden>Fel lösenord, försök igen.</p>
+    </div>
+  </div>
+
+  <!-- Main App -->
+  <div id="app" hidden>
+    <header>
+      <h1>Vår Odlingslott</h1>
+      <p class="subtitle">Följ vår resa med kolonilotten</p>
+    </header>
+
+    <div class="toolbar">
+      <button id="upload-btn" class="btn-primary">+ Lägg till</button>
+    </div>
+
+    <!-- Upload Modal -->
+    <div id="upload-modal" class="modal" hidden>
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>Lägg till nytt</h2>
+          <button id="close-modal" class="btn-close">&times;</button>
+        </div>
+
+        <div class="tab-bar">
+          <button class="tab active" data-tab="image">Bild</button>
+          <button class="tab" data-tab="video">YouTube-video</button>
+        </div>
+
+        <form id="upload-form">
+          <input type="hidden" id="post-type" value="image">
+
+          <div id="image-fields">
+            <label for="file-input" class="file-label" id="file-label">
+              <span>Välj bild...</span>
+            </label>
+            <input type="file" id="file-input" accept="image/*" capture="environment">
+            <img id="image-preview" hidden>
+          </div>
+
+          <div id="video-fields" hidden>
+            <input type="url" id="youtube-url" placeholder="Klistra in YouTube-länk">
+          </div>
+
+          <input type="text" id="post-caption" placeholder="Bildtext (valfritt)">
+          <input type="text" id="post-author" placeholder="Ditt namn" required>
+          <button type="submit" class="btn-primary" id="submit-btn">Ladda upp</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Feed -->
+    <div id="feed"></div>
+
+    <div id="empty-state" hidden>
+      <p>Inga inlägg ännu. Klicka "Lägg till" för att börja!</p>
+    </div>
+
+    <div id="loading">
+      <p>Laddar...</p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
