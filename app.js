@@ -1,9 +1,8 @@
 // ============================================
-// CONFIG - Change these values
+// CONFIG
 // ============================================
 const SUPABASE_URL = 'https://bgmhubnhjnobnszgyerb.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_HacQmdpIXTKjEeSskPmK1g_5s4cxZap';
-const SITE_PASSWORD = 'odlingslansen2026';
 
 // ============================================
 // INIT
@@ -25,17 +24,32 @@ function checkPassword() {
   $('#password-screen').hidden = false;
 }
 
-$('#password-form').addEventListener('submit', (e) => {
+$('#password-form').addEventListener('submit', async (e) => {
   e.preventDefault();
   const entered = $('#password-input').value;
-  if (entered === SITE_PASSWORD) {
-    localStorage.setItem('varodlingslott_auth', 'true');
-    localStorage.setItem('varodlingslott_name', '');
-    showApp();
-  } else {
+  const btn = $('#password-form').querySelector('button');
+  btn.disabled = true;
+  btn.textContent = 'Kontrollerar...';
+
+  try {
+    const { data, error } = await db.rpc('verify_password', { input_password: entered });
+    if (error) throw error;
+
+    if (data === true) {
+      localStorage.setItem('varodlingslott_auth', 'true');
+      localStorage.setItem('varodlingslott_name', '');
+      showApp();
+    } else {
+      $('#password-error').hidden = false;
+      $('#password-input').value = '';
+      $('#password-input').focus();
+    }
+  } catch (err) {
+    console.error('Password check error:', err);
     $('#password-error').hidden = false;
-    $('#password-input').value = '';
-    $('#password-input').focus();
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Kom in';
   }
 });
 
