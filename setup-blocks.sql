@@ -1,7 +1,11 @@
 -- ============================================
--- Vår Odlingslott - Database Setup (block-based posts)
--- Paste into Supabase SQL Editor and click Run
+-- Block-based posts migration
+-- Run in Supabase SQL Editor (replaces old posts schema)
 -- ============================================
+
+DROP TABLE IF EXISTS comments CASCADE;
+DROP TABLE IF EXISTS post_blocks CASCADE;
+DROP TABLE IF EXISTS posts CASCADE;
 
 CREATE TABLE posts (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -47,7 +51,10 @@ CREATE POLICY "comments_select" ON comments FOR SELECT USING (true);
 CREATE POLICY "comments_insert" ON comments FOR INSERT WITH CHECK (true);
 CREATE POLICY "comments_delete" ON comments FOR DELETE USING (true);
 
-INSERT INTO storage.buckets (id, name, public) VALUES ('images', 'images', true);
+-- Storage bucket (skip if already exists)
+INSERT INTO storage.buckets (id, name, public)
+VALUES ('images', 'images', true)
+ON CONFLICT (id) DO NOTHING;
 
 CREATE POLICY "images_select" ON storage.objects FOR SELECT USING (bucket_id = 'images');
 CREATE POLICY "images_insert" ON storage.objects FOR INSERT WITH CHECK (bucket_id = 'images');

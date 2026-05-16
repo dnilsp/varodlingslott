@@ -8,76 +8,59 @@
 </head>
 <body>
 
-  <!-- Password Gate -->
-  <div id="password-screen">
-    <div class="password-box">
-      <h1>Vår Odlingslott</h1>
-      <p>Ange lösenord för att komma in</p>
-      <form id="password-form">
-        <input type="password" id="password-input" placeholder="Lösenord" autocomplete="off" required>
-        <button type="submit">Kom in</button>
-      </form>
-      <p id="password-error" class="error" hidden>Fel lösenord, försök igen.</p>
-    </div>
-  </div>
-
-  <!-- Main App -->
-  <div id="app" hidden>
-    <header>
+  <header class="site-header">
+    <div class="site-brand">
       <h1>Vår Odlingslott</h1>
       <p class="subtitle">Följ vår resa med kolonilotten</p>
-    </header>
+    </div>
+    <div id="auth-area" class="auth-area"></div>
+  </header>
 
-    <div class="toolbar">
-      <button id="upload-btn" class="btn-primary">+ Lägg till</button>
+  <main id="app">
+    <div class="toolbar" id="toolbar" hidden>
+      <button id="new-post-btn" class="btn-primary">+ Nytt inlägg</button>
     </div>
 
-    <!-- Upload Modal -->
-    <div id="upload-modal" class="modal" hidden>
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2>Lägg till nytt</h2>
-          <button id="close-modal" class="btn-close">&times;</button>
-        </div>
-
-        <div class="tab-bar">
-          <button class="tab active" data-tab="image">Bild</button>
-          <button class="tab" data-tab="video">YouTube-video</button>
-        </div>
-
-        <form id="upload-form">
-          <input type="hidden" id="post-type" value="image">
-
-          <div id="image-fields">
-            <label for="file-input" class="file-label" id="file-label">
-              <span>Välj bild...</span>
-            </label>
-            <input type="file" id="file-input" accept="image/*" capture="environment">
-            <img id="image-preview" hidden>
-          </div>
-
-          <div id="video-fields" hidden>
-            <input type="url" id="youtube-url" placeholder="Klistra in YouTube-länk">
-          </div>
-
-          <input type="text" id="post-caption" placeholder="Bildtext (valfritt)">
-          <input type="text" id="post-author" placeholder="Ditt namn" required>
-          <button type="submit" class="btn-primary" id="submit-btn">Ladda upp</button>
-        </form>
+    <section id="composer" class="composer" hidden>
+      <div class="composer-header">
+        <h2 id="composer-heading">Nytt inlägg</h2>
+        <button type="button" id="close-composer" class="btn-close" aria-label="Stäng">&times;</button>
       </div>
-    </div>
 
-    <!-- Feed -->
-    <div id="feed"></div>
+      <div id="composer-start" class="composer-start">
+        <input type="text" id="composer-title" placeholder="Titel" required>
+        <input type="text" id="composer-author" placeholder="Ditt namn" required>
+        <button type="button" id="start-post-btn" class="btn-primary">Börja skriva</button>
+      </div>
 
+      <div id="composer-body" hidden>
+        <h3 class="composer-post-title" id="composer-title-display"></h3>
+        <div id="composer-blocks" class="composer-blocks"></div>
+
+        <div id="composer-add-form" class="composer-add-form" hidden></div>
+
+        <div class="composer-add-buttons">
+          <button type="button" class="btn-secondary" data-add="text">+ Text</button>
+          <button type="button" class="btn-secondary" data-add="subtitle">+ Underrubrik</button>
+          <button type="button" class="btn-secondary" data-add="image">+ Bild</button>
+          <button type="button" class="btn-secondary" data-add="video">+ Video</button>
+        </div>
+
+        <div class="composer-actions">
+          <button type="button" id="publish-btn" class="btn-primary">Avsluta inlägg</button>
+          <button type="button" id="cancel-composer-btn" class="btn-ghost">Avbryt</button>
+        </div>
+      </div>
+    </section>
+
+    <div id="loading">Laddar...</div>
     <div id="empty-state" hidden>
-      <p>Inga inlägg ännu. Klicka "Lägg till" för att börja!</p>
+      <p>Inga inlägg ännu.</p>
     </div>
+    <div id="feed"></div>
+  </main>
 
-    <div id="loading">
-      <p>Laddar...</p>
-    </div>
-  </div>
+  <input type="file" id="hidden-file-input" accept="image/*" capture="environment" hidden>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="app.js"></script>
