@@ -513,6 +513,24 @@ body {
   background: var(--green-dark);
 }
 
+.image-source-label {
+  font-size: 0.9rem;
+  color: var(--text-light);
+  margin-bottom: 0.25rem;
+}
+
+.image-source-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.image-file-status {
+  font-size: 0.85rem;
+  color: var(--green);
+  min-height: 1.25rem;
+}
+
 .file-label {
   display: flex;
   align-items: center;

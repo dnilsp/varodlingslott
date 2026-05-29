@@ -95,10 +95,21 @@ $$('.composer-add-buttons [data-add]').forEach((btn) => {
   btn.addEventListener('click', () => showAddBlockForm(btn.dataset.add));
 });
 
-$('#hidden-file-input').addEventListener('change', (e) => {
+function handleImageFileSelected(e) {
   const file = e.target.files[0];
-  if (file) pendingImageFile = file;
-});
+  if (!file) return;
+  pendingImageFile = file;
+  const status = $('#image-file-status');
+  if (status) status.textContent = file.name;
+}
+
+$('#file-input-gallery').addEventListener('change', handleImageFileSelected);
+$('#file-input-camera').addEventListener('change', handleImageFileSelected);
+
+function clearImageInputs() {
+  $('#file-input-gallery').value = '';
+  $('#file-input-camera').value = '';
+}
 
 function openComposerNew() {
   composerPostId = null;
@@ -202,11 +213,18 @@ function showAddBlockForm(type) {
     `;
   } else if (type === 'image') {
     form.innerHTML = `
-      <label class="file-label" for="hidden-file-input">Välj bild...</label>
+      <p class="image-source-label">Var vill du hämta bilden?</p>
+      <div class="image-source-buttons">
+        <button type="button" class="btn-secondary" id="pick-gallery-btn">Välj från galleri</button>
+        <button type="button" class="btn-secondary" id="pick-camera-btn">Ta foto</button>
+      </div>
+      <p id="image-file-status" class="image-file-status"></p>
       <button type="button" class="btn-primary" id="confirm-add-block">Lägg till bild</button>
       <button type="button" class="btn-ghost" id="cancel-add-block">Avbryt</button>
     `;
-    $('#hidden-file-input').value = '';
+    clearImageInputs();
+    $('#pick-gallery-btn').addEventListener('click', () => $('#file-input-gallery').click());
+    $('#pick-camera-btn').addEventListener('click', () => $('#file-input-camera').click());
   } else if (type === 'video') {
     form.innerHTML = `
       <input type="url" id="add-block-input" placeholder="YouTube-länk">
@@ -223,7 +241,7 @@ function hideAddBlockForm() {
   $('#composer-add-form').hidden = true;
   $('#composer-add-form').innerHTML = '';
   pendingImageFile = null;
-  $('#hidden-file-input').value = '';
+  clearImageInputs();
 }
 
 async function confirmAddBlock(type) {
